@@ -4,7 +4,7 @@
   "description": "Verify a user's email address with a one-time code before creating their NodeBB account.",
   "version": "0.1.0",
   "compatibility": "^4.15.0",
-  "library": "./library.js",
+  "library": "./lib/email-code.js",
   "hooks": [
     {
       "hook": "static:app.load",
@@ -24,7 +24,7 @@
     }
   ],
   "scripts": [
-    "public/lib/main.js"
+    "public/lib/verified.js"
   ],
   "templates": "templates",
   "languages": "languages"
