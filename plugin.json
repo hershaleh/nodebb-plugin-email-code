@@ -2,6 +2,8 @@
   "id": "nodebb-plugin-email-code",
   "name": "Email Code Registration",
   "description": "Verify a user's email address with a one-time code before creating their NodeBB account.",
+  "version": "0.1.0",
+  "compatibility": "^4.15.0",
   "library": "./library.js",
   "hooks": [
     {
@@ -15,10 +17,15 @@
     {
       "hook": "filter:register.check",
       "method": "checkRegistration"
+    },
+    {
+      "hook": "filter:register.complete",
+      "method": "completeRegistration"
     }
   ],
   "scripts": [
     "public/lib/main.js"
   ],
-  "templates": "templates"
+  "templates": "templates",
+  "languages": "languages"
 }
