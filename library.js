@@ -8,10 +8,9 @@ const TTL = 600;
 const COOLDOWN = 60;
 const MAX_ATTEMPTS = 5;
 const PREFIX = 'plugin:email-code:';
-
 const normalize = value => String(value || '').trim().toLowerCase();
 const emailValid = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
-const emailHash = email => crypto.createHash('sha256').update(email).digest('hex');
+const emailHash = value => crypto.createHash('sha256').update(value).digest('hex');
 const codeHash = (email, code) => crypto.createHash('sha256').update(email + ':' + code).digest('hex');
 const compare = (a, b) => {
  const x = Buffer.from(String(a)); const y = Buffer.from(String(b));
@@ -22,6 +21,7 @@ const EmailCode = module.exports;
 EmailCode.init = async ({ app }) => {
  app.post('/api/v3/plugins/email-code/send', async (req, res) => {
   try {
+   if (req.loggedIn) return res.status(403).json({ error: 'email-code:registration-only' });
    const email = normalize(req.body.email);
    if (!emailValid(email)) return res.status(400).json({ error: 'email-code:invalid-email' });
    const ip = String(req.ip || req.socket?.remoteAddress || 'unknown');
@@ -32,7 +32,7 @@ EmailCode.init = async ({ app }) => {
 
    const code = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
    const codeKey = PREFIX + 'code:' + emailHash(email);
-   await db.set(codeKey, JSON.stringify({ hash: codeHash(email, code), attempts: 0 }));
+   await db.set(codeKey, JSON.stringify({ hash: codeHash(email, code), attempts: 0, created: Date.now() }));
    await db.expire(codeKey, TTL);
    await Promise.all([db.set(ipKey, '1'), db.expire(ipKey, COOLDOWN), db.set(mailKey, '1'), db.expire(mailKey, COOLDOWN)]);
 
@@ -66,6 +66,9 @@ EmailCode.checkRegistration = async data => {
  if (!raw) throw new Error('[[email-code:code-expired]]');
  let record;
  try { record = JSON.parse(raw); } catch { await db.delete(key); throw new Error('[[email-code:code-expired]]'); }
+ if (!record.created || Date.now() - Number(record.created) > TTL * 1000) {
+  await db.delete(key); throw new Error('[[email-code:code-expired]]');
+ }
  record.attempts = Number(record.attempts || 0) + 1;
  if (record.attempts > MAX_ATTEMPTS) { await db.delete(key); throw new Error('[[email-code:too-many-attempts]]'); }
  if (!compare(record.hash, codeHash(email, code))) {
