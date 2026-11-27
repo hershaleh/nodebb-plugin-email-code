@@ -1,0 +1,17 @@
+{
+  "name": "nodebb-plugin-email-code",
+  "version": "0.1.0",
+  "description": "Require email verification before NodeBB account registration.",
+  "main": "library.js",
+  "license": "MIT",
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "email",
+    "registration",
+    "verification"
+  ],
+  "nbbpm": {
+    "compatibility": "^4.15.0"
+  }
+}
