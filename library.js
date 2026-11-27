@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const db = require.main.require('./src/database');
 const emailer = require.main.require('./src/emailer');
 const meta = require.main.require('./src/meta');
+const user = require.main.require('./src/user');
 
 const TTL = 600;
 const COOLDOWN = 60;
@@ -77,5 +78,12 @@ EmailCode.checkRegistration = async data => {
  }
  await db.delete(key);
  data.userData.email = email;
+ return data;
+};
+
+EmailCode.completeRegistration = async data => {
+ if (data.uid) {
+  await user.email.confirmByUid(data.uid);
+ }
  return data;
 };
