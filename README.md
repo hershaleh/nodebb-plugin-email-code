@@ -13,7 +13,8 @@ Pre-registration email-code verification for NodeBB. This repository now contain
 - Server-side validation runs through `filter:register.check` before account creation.
 - Code is generated with a cryptographically secure random generator and stored as a SHA-256 hash.
 - Code validity: 10 minutes; resend cooldown: 60 seconds; maximum 5 attempts.
-- Sets the submitted email on the registration user data after successful verification.
+- Sets the submitted email on registration data after successful verification.
+- After account creation, calls NodeBB's native `user.email.confirmByUid(uid)` so the address is marked verified in NodeBB's own email/group records.
 - Existing login flow is unchanged.
 
 ## Local test plan
