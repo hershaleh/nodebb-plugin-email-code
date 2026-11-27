@@ -14,6 +14,11 @@ $(document).ready(function () {
 	register.disabled = true;
 
 	const translations = {
+		'email-code:sending': 'שולח קוד אימות…',
+		'email-code:code-sent': 'הקוד נשלח. בדוק את תיבת הדואר.',
+		'email-code:verified': 'כתובת המייל אומתה. אפשר להירשם.',
+		'email-code:email-changed': 'כתובת המייל השתנתה. יש לאמת אותה מחדש.',
+		'email-code:verify-first': 'יש לאמת את כתובת המייל לפני ההרשמה.',
 		'email-code:wait-before-resend': 'יש להמתין דקה לפני שליחת קוד נוסף.',
 		'email-code:invalid-email': 'כתובת הדואר האלקטרוני אינה תקינה.',
 		'email-code:wrong-code': 'קוד האימות שגוי.',
