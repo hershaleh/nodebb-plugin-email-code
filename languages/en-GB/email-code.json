@@ -1,0 +1,11 @@
+{
+  "email-label": "Email address and verification code",
+  "invalid-email": "Invalid email address",
+  "wait-before-resend": "Please wait before requesting another code",
+  "verify-first": "Verify your email address before registering",
+  "code-expired": "The verification code expired or was not sent",
+  "too-many-attempts": "Too many attempts. Request a new code",
+  "wrong-code": "Incorrect verification code",
+  "send-failed": "Failed to send verification code",
+  "code-sent": "Verification code sent"
+}
